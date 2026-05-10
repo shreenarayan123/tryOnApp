@@ -1,0 +1,30 @@
+{
+  "name": "trysnap",
+  "displayName": "TrySnap",
+  "version": "1.0.0",
+  "slug": "trysnap",
+  "platforms": [
+    "android"
+  ],
+  "scheme": "trysnap",
+  "primaryColor": "#1F2937",
+  "assetBundlePatterns": [
+    "**/*"
+  ],
+  "android": {
+    "package": "com.trysnap.app",
+    "versionCode": 1,
+    "permissions": [
+      "CAMERA",
+      "READ_EXTERNAL_STORAGE",
+      "WRITE_EXTERNAL_STORAGE",
+      "ACCESS_COARSE_LOCATION",
+      "ACCESS_FINE_LOCATION"
+    ]
+  },
+  "extra": {
+    "eas": {
+      "projectId": "6b1e6182-da86-4f8c-a6d7-353754ddcb66"
+    }
+  }
+}
