@@ -10,7 +10,14 @@ pluginManagement {
   }
 }
 
-plugins { id("com.facebook.react.settings") }
+def version = providers.exec {
+  commandLine("node", "-e", "console.log(require('react-native/package.json').version);")
+}.standardOutput.asText.get().trim()
+def (_, reactNativeMinor, reactNativePatch) = version.split("-")[0].tokenize('.').collect { it.toInteger() }
+
+if(reactNativeMinor == 74 && reactNativePatch <= 3){
+  plugins { id("com.facebook.react.settings") }
+}
 
 def getRNMinorVersion() {
   def version = providers.exec {
