@@ -1,6 +1,5 @@
 {
   "name": "trysnap",
-  "displayName": "TrySnap",
   "version": "1.0.0",
   "slug": "trysnap",
   "platforms": [
@@ -10,6 +9,14 @@
   "primaryColor": "#1F2937",
   "assetBundlePatterns": [
     "**/*"
+  ],
+  "plugins": [
+    [
+      "react-native-google-mobile-ads",
+      {
+        "androidAppId": "ca-app-pub-3940256099942544~3347511713"
+      }
+    ]
   ],
   "android": {
     "package": "com.trysnap.app",

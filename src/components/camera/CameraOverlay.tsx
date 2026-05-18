@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: 34,
     height: 34,
-    borderColor: 'rgba(255,255,255,0.72)',
+    borderColor: 'rgba(15,23,42,0.72)',
     borderWidth: 2,
   },
   topLeft: {
@@ -98,9 +98,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 999,
-    backgroundColor: 'rgba(0,0,0,0.52)',
+    backgroundColor: 'rgba(255,255,255,0.86)',
     borderWidth: StyleSheet.hairlineWidth,
-    borderColor: 'rgba(255,255,255,0.12)',
+    borderColor: 'rgba(15,23,42,0.08)',
   },
   instruction: {
     color: COLORS.textPrimary,

@@ -52,7 +52,7 @@ const AvatarSetupScreen = ({navigation, route}: Props) => {
 
     setSaving(true);
     try {
-      storageService.setString('avatar_photo_path', selectedPhoto);
+      await storageService.setString('avatar_photo_path', selectedPhoto);
       setAvatarPhoto(selectedPhoto);
       triggerNotification('success');
       if (route.params?.fromSettings) {
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
     height: 208,
     borderRadius: 28,
     borderWidth: 2,
-    borderColor: 'rgba(255,255,255,0.14)',
+    borderColor: 'rgba(15,23,42,0.14)',
     backgroundColor: COLORS.surface,
     padding: 10,
   },
@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
-    backgroundColor: 'rgba(255,255,255,0.02)',
+    backgroundColor: 'rgba(15,23,42,0.02)',
   },
   uploadText: {
     color: COLORS.textSecondary,
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
     bottom: 14,
     color: COLORS.textPrimary,
     fontWeight: '700',
-    backgroundColor: 'rgba(15,15,15,0.45)',
+    backgroundColor: 'rgba(255,255,255,0.82)',
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 999,

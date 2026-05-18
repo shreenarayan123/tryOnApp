@@ -67,9 +67,7 @@ const postTryOn = async (
   attempt = 0,
 ): Promise<TryOnServiceResponse> => {
   const startedAt = Date.now();
-  const formData = await buildFormData(request.avatarPath, request.garmentPath);
-
-  if (__DEV__ || MOCK_BACKEND_ENABLED) {
+  if (MOCK_BACKEND_ENABLED) {
     await wait(6000);
     return {
       success: true,
@@ -77,6 +75,8 @@ const postTryOn = async (
       processingTime: Date.now() - startedAt,
     };
   }
+
+  const formData = await buildFormData(request.avatarPath, request.garmentPath);
 
   try {
     const response = await axios.post(`${CONFIG.API_BASE_URL}/api/tryon`, formData, {

@@ -52,6 +52,7 @@ const ProcessingScreen = ({navigation, route}: Props) => {
   const [progress, setProgress] = useState(0);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const startedAd = useRef(false);
+  const startedTryOn = useRef(false);
 
   useEffect(() => {
     loadInterstitial();
@@ -86,6 +87,11 @@ const ProcessingScreen = ({navigation, route}: Props) => {
   }, [status]);
 
   useEffect(() => {
+    if (startedTryOn.current) {
+      return;
+    }
+
+    startedTryOn.current = true;
     let mounted = true;
     (async () => {
       try {
@@ -103,7 +109,6 @@ const ProcessingScreen = ({navigation, route}: Props) => {
             onPress: () => navigation.popToTop(),
           },
         ]);
-        navigation.popToTop();
       }
     })();
 
@@ -233,7 +238,7 @@ const styles = StyleSheet.create({
   progressOuter: {
     height: 10,
     borderRadius: 999,
-    backgroundColor: 'rgba(255,255,255,0.08)',
+    backgroundColor: 'rgba(15,23,42,0.08)',
     overflow: 'hidden',
   },
   progressInner: {

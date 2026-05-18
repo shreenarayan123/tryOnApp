@@ -1,5 +1,5 @@
 export const CONFIG = {
-  API_BASE_URL: 'https://api.trysnap.in',
+  API_BASE_URL: 'http://10.206.72.91:4000',
   FREE_DAILY_LIMIT: 5,
   MAX_IMAGE_SIZE_KB: 500,
   PROCESSING_TIMEOUT_MS: 30000,
@@ -15,4 +15,4 @@ export const CONFIG = {
   SUPPORT_EMAIL: 'support@trysnap.in',
 } as const;
 
-export const MOCK_BACKEND_ENABLED = true;
+export const MOCK_BACKEND_ENABLED = false;

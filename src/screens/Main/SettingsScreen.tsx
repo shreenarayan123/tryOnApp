@@ -1,7 +1,6 @@
 import React, {useMemo, useState} from 'react';
 import {
   Alert,
-  Linking,
   Modal,
   Pressable,
   ScrollView,
@@ -13,6 +12,7 @@ import {
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {WebView} from 'react-native-webview';
+import FastImage from 'react-native-fast-image';
 import Card from '../../components/common/Card';
 import {COLORS} from '../../constants/colors';
 import {CONFIG} from '../../constants/config';
@@ -50,21 +50,19 @@ const row = (
 const SettingsScreen = ({navigation}: Props) => {
   const avatarPhotoPath = useUserStore(state => state.avatarPhotoPath);
   const isPro = useUserStore(state => state.isPro);
-  const setAvatarPhoto = useUserStore(state => state.setAvatarPhoto);
   const clearAvatarPhoto = useUserStore(state => state.clearAvatarPhoto);
-  const setIsPro = useUserStore(state => state.setIsPro);
   const clearHistory = useHistoryStore(state => state.clearAll);
   const [privacyOpen, setPrivacyOpen] = useState(false);
   const [howItWorksOpen, setHowItWorksOpen] = useState(false);
 
-  const rootNavigation = navigation.getParent()?.getParent() as any;
+  const rootNavigation = navigation.getParent() as any;
 
   const openAvatarSetup = () => {
     rootNavigation?.navigate('AvatarSetupModal', {fromSettings: true});
   };
 
   const openPro = () => {
-    rootNavigation?.navigate('ProModal' as never);
+    navigation.getParent()?.navigate('ProModal' as never);
   };
 
   const shareApp = async () => {
@@ -74,28 +72,10 @@ const SettingsScreen = ({navigation}: Props) => {
   };
 
   const resetAvatar = () => {
-    storageService.remove('avatar_photo_path');
+    void storageService.remove('avatar_photo_path');
     clearAvatarPhoto();
     setHowItWorksOpen(false);
     openAvatarSetup();
-  };
-
-  const clearApp = () => {
-    Alert.alert('Reset App?', 'This will clear every local TrySnap setting and history.', [
-      {text: 'Cancel', style: 'cancel'},
-      {
-        text: 'Reset App',
-        style: 'destructive',
-        onPress: () => {
-          storageService.clearAll();
-          clearHistory();
-          clearAvatarPhoto();
-          setIsPro(false);
-          navigation.getParent()?.navigate('CameraTab');
-          rootNavigation?.navigate('Onboarding');
-        },
-      },
-    ]);
   };
 
   const versionText = useMemo(() => 'v1.0.0', []);
@@ -109,7 +89,7 @@ const SettingsScreen = ({navigation}: Props) => {
         <Pressable onPress={openAvatarSetup} style={styles.avatarRow}>
           {avatarPhotoPath ? (
             <View style={styles.avatarThumbWrap}>
-              <View style={styles.avatarThumb} />
+              <FastImage source={{uri: avatarPhotoPath}} style={styles.avatarThumb} resizeMode={FastImage.resizeMode.cover} />
             </View>
           ) : (
             <View style={styles.avatarThumbEmpty}>
@@ -130,22 +110,20 @@ const SettingsScreen = ({navigation}: Props) => {
           ? row(
               'crown',
               'Pro Member ✓',
-              'Thanks for supporting TrySnap!',
+              'Download photos • Change Avatar • Unlimited try-ons',
               () => {},
               <MaterialCommunityIcons name="check-circle" color={COLORS.success} size={18} />,
             )
           : row(
               'crown-outline',
               'Go Pro — ₹999 Lifetime',
-              'Remove ads • Unlimited try-ons • Priority processing',
+              'Remove ads • Unlimited try-ons • Download photos • Change Avatar',
               openPro,
             )}
       </Card>
 
       <Card style={styles.section}>
         <Text style={styles.sectionLabel}>App</Text>
-        {row('storefront-outline', 'Rate TrySnap', 'Open the Play Store listing', () => Linking.openURL(CONFIG.APP_STORE_URL))}
-        <View style={styles.divider} />
         {row('share-variant-outline', 'Share TrySnap', 'Invite a friend to download the app', shareApp)}
         <View style={styles.divider} />
         {row('shield-search-outline', 'Privacy Policy', 'Read how your data is handled', () => setPrivacyOpen(true))}
@@ -158,21 +136,26 @@ const SettingsScreen = ({navigation}: Props) => {
         {row('trash-can-outline', 'Clear History', 'Remove all saved try-on results', () => clearHistory(), undefined, true)}
         <View style={styles.divider} />
         {row('account-remove-outline', 'Reset Avatar', 'Choose a new body photo', resetAvatar, undefined, true)}
-        <View style={styles.divider} />
-        {row('restart', 'Reset App', 'Clear MMKV data and return to onboarding', clearApp, undefined, true)}
       </Card>
 
       <Text style={styles.version}>{versionText}</Text>
 
       <Modal visible={privacyOpen} animationType="slide" onRequestClose={() => setPrivacyOpen(false)}>
-        <View style={styles.modalHeader}>
-          <Pressable onPress={() => setPrivacyOpen(false)}>
-            <Text style={styles.modalClose}>Close</Text>
-          </Pressable>
-          <Text style={styles.modalTitle}>Privacy Policy</Text>
-          <View style={{width: 40}} />
+        <View style={styles.modalShell}>
+          <View style={styles.modalHeader}>
+            <Pressable onPress={() => setPrivacyOpen(false)}>
+              <Text style={styles.modalClose}>Close</Text>
+            </Pressable>
+            <Text style={styles.modalTitle}>Privacy Policy</Text>
+            <View style={{width: 40}} />
+          </View>
+          <WebView
+            style={styles.webView}
+            source={{uri: CONFIG.PRIVACY_POLICY_URL}}
+            originWhitelist={['*']}
+            startInLoadingState
+          />
         </View>
-        <WebView source={{uri: CONFIG.PRIVACY_POLICY_URL}} />
       </Modal>
 
       <Modal transparent visible={howItWorksOpen} animationType="fade" onRequestClose={() => setHowItWorksOpen(false)}>
@@ -232,7 +215,7 @@ const styles = StyleSheet.create({
     borderRadius: 26,
     padding: 2,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.08)',
+    borderColor: 'rgba(15,23,42,0.08)',
   },
   avatarThumb: {
     flex: 1,
@@ -281,7 +264,7 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: StyleSheet.hairlineWidth,
-    backgroundColor: 'rgba(255,255,255,0.08)',
+    backgroundColor: 'rgba(15,23,42,0.08)',
   },
   version: {
     color: COLORS.textSecondary,
@@ -295,8 +278,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: 'rgba(255,255,255,0.08)',
+    borderBottomColor: 'rgba(15,23,42,0.08)',
     backgroundColor: COLORS.surface,
+  },
+  modalShell: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+  },
+  webView: {
+    flex: 1,
+    backgroundColor: COLORS.background,
   },
   modalClose: {
     color: COLORS.accent,
@@ -309,7 +300,7 @@ const styles = StyleSheet.create({
   },
   modalBackdrop: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.68)',
+    backgroundColor: 'rgba(15,23,42,0.24)',
     alignItems: 'center',
     justifyContent: 'center',
     padding: 24,
@@ -321,7 +312,7 @@ const styles = StyleSheet.create({
     padding: 20,
     gap: 12,
     borderWidth: StyleSheet.hairlineWidth,
-    borderColor: 'rgba(255,255,255,0.08)',
+    borderColor: 'rgba(15,23,42,0.08)',
   },
   infoTitle: {
     color: COLORS.textPrimary,

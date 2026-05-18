@@ -1,6 +1,6 @@
 import {create} from 'zustand';
 import {persist, createJSONStorage} from 'zustand/middleware';
-import {mmkvStorageAdapter} from '../services/storageService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {HistoryState, TryOnResult} from '../types';
 
 export const useHistoryStore = create<HistoryState>()(
@@ -15,7 +15,7 @@ export const useHistoryStore = create<HistoryState>()(
     }),
     {
       name: 'trysnap-history-store',
-      storage: createJSONStorage(() => mmkvStorageAdapter),
+      storage: createJSONStorage(() => AsyncStorage),
     },
   ),
 );

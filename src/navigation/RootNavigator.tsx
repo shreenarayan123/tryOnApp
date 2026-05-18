@@ -21,10 +21,25 @@ const RootNavigator = () => {
   );
 
   useEffect(() => {
-    const onboardingComplete = storageService.getBoolean('onboarding_complete');
-    setCompletedOnboarding(Boolean(onboardingComplete));
-    resetDailyCountIfNewDay();
-    setIsReady(true);
+    let isMounted = true;
+
+    const hydrate = async () => {
+      const onboardingComplete = await storageService.getBoolean('onboarding_complete');
+
+      if (!isMounted) {
+        return;
+      }
+
+      setCompletedOnboarding(Boolean(onboardingComplete));
+      resetDailyCountIfNewDay();
+      setIsReady(true);
+    };
+
+    hydrate();
+
+    return () => {
+      isMounted = false;
+    };
   }, [resetDailyCountIfNewDay]);
 
   if (!isReady) {

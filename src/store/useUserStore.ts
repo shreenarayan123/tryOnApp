@@ -1,7 +1,7 @@
 import {create} from 'zustand';
 import {persist, createJSONStorage} from 'zustand/middleware';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {CONFIG} from '../constants/config';
-import {mmkvStorageAdapter} from '../services/storageService';
 import {UserState} from '../types';
 
 const today = () => new Date().toISOString().slice(0, 10);
@@ -47,7 +47,7 @@ export const useUserStore = create<UserState>()(
     }),
     {
       name: 'trysnap-user-store',
-      storage: createJSONStorage(() => mmkvStorageAdapter),
+      storage: createJSONStorage(() => AsyncStorage),
     },
   ),
 );

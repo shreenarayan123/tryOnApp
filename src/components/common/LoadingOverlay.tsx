@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(15,15,15,0.72)',
+    backgroundColor: 'rgba(248,250,252,0.86)',
   },
   text: {
     color: COLORS.textSecondary,

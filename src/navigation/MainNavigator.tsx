@@ -30,8 +30,10 @@ const MainNavigator = () => {
         tabBarShowLabel: false,
         tabBarStyle: {
           backgroundColor: COLORS.surface,
-          borderTopColor: 'rgba(255,255,255,0.06)',
-          height: 64,
+          borderTopColor: 'rgba(15,23,42,0.08)',
+          height: 70,
+          paddingBottom: 8,
+          paddingTop: 6,
           shadowColor: '#000',
           shadowOpacity: 0.3,
           shadowRadius: 12,

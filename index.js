@@ -3,3 +3,6 @@ import App from './App';
 import {name as appName} from './app.json';
 
 AppRegistry.registerComponent(appName, () => App);
+// Expo dev client expects the root component to be registered as "main".
+// Register it as well to avoid "main has not been registered" errors.
+AppRegistry.registerComponent('main', () => App);

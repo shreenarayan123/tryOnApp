@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height * 0.7,
     borderRadius: 30,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.12)',
+    borderColor: 'rgba(15,23,42,0.12)',
     backgroundColor: COLORS.surface,
     padding: 10,
     shadowColor: '#000',
@@ -212,15 +212,14 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: COLORS.surface,
     borderWidth: StyleSheet.hairlineWidth,
-    borderColor: 'rgba(255,255,255,0.08)',
+    borderColor: 'rgba(15,23,42,0.08)',
   },
   reactionLiked: {
     backgroundColor: 'rgba(34,197,94,0.16)',
     borderColor: 'rgba(34,197,94,0.35)',
   },
   reactionDisliked: {
-    backgroundColor: 'rgba(255,255,255,0.06)',
-    opacity: 0.7,
+    backgroundColor: 'rgba(15,23,42,0.04)',
   },
   reactionEmoji: {
     fontSize: 16,

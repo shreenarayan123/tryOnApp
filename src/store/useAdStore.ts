@@ -1,6 +1,6 @@
 import {create} from 'zustand';
 import {persist, createJSONStorage} from 'zustand/middleware';
-import {mmkvStorageAdapter} from '../services/storageService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AdState} from '../types';
 
 export const useAdStore = create<AdState>()(
@@ -18,7 +18,7 @@ export const useAdStore = create<AdState>()(
     }),
     {
       name: 'trysnap-ad-store',
-      storage: createJSONStorage(() => mmkvStorageAdapter),
+      storage: createJSONStorage(() => AsyncStorage),
     },
   ),
 );

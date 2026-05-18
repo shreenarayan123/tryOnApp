@@ -92,20 +92,20 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   ghost: {
-    backgroundColor: 'rgba(255,255,255,0.04)',
+    backgroundColor: '#F1F5F9',
     borderWidth: StyleSheet.hairlineWidth,
-    borderColor: 'rgba(255,255,255,0.08)',
+    borderColor: 'rgba(15,23,42,0.08)',
   },
   ghostTitle: {
     color: COLORS.textPrimary,
   },
   danger: {
-    backgroundColor: 'rgba(239,68,68,0.12)',
+    backgroundColor: 'rgba(239,68,68,0.1)',
     borderWidth: StyleSheet.hairlineWidth,
-    borderColor: 'rgba(239,68,68,0.3)',
+    borderColor: 'rgba(239,68,68,0.24)',
   },
   dangerTitle: {
-    color: '#FCA5A5',
+    color: '#B91C1C',
   },
   disabled: {
     opacity: 0.45,

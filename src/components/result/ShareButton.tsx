@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: COLORS.surfaceLight,
     borderWidth: StyleSheet.hairlineWidth,
-    borderColor: 'rgba(255,255,255,0.08)',
+    borderColor: 'rgba(15,23,42,0.08)',
   },
   title: {
     color: COLORS.textPrimary,

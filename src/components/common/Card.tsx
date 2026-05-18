@@ -16,8 +16,13 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.surface,
     borderRadius: 16,
     borderWidth: StyleSheet.hairlineWidth,
-    borderColor: 'rgba(255,255,255,0.08)',
+    borderColor: 'rgba(15,23,42,0.08)',
     padding: 16,
+    shadowColor: '#0F172A',
+    shadowOpacity: 0.06,
+    shadowRadius: 18,
+    shadowOffset: {width: 0, height: 8},
+    elevation: 2,
   },
 });
 

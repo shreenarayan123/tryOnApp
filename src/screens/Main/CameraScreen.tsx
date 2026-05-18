@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
   },
   topBar: {
     position: 'absolute',
-    top: Platform.OS === 'android' ? 44 : 54,
+    top: Platform.OS === 'android' ? 22 : 30,
     left: 18,
     right: 18,
     zIndex: 10,
@@ -211,15 +211,15 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 18,
     right: 18,
-    bottom: 24,
+    bottom: 14,
     gap: 18,
   },
   counterCard: {
-    backgroundColor: 'rgba(26,26,46,0.88)',
+    backgroundColor: 'rgba(255,255,255,0.86)',
     borderRadius: 16,
     padding: 14,
     borderWidth: StyleSheet.hairlineWidth,
-    borderColor: 'rgba(255,255,255,0.08)',
+    borderColor: 'rgba(15,23,42,0.08)',
   },
   counterRow: {
     flexDirection: 'row',
@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
   progressTrack: {
     height: 6,
     borderRadius: 999,
-    backgroundColor: 'rgba(255,255,255,0.08)',
+    backgroundColor: 'rgba(15,23,42,0.08)',
     overflow: 'hidden',
   },
   progressFill: {
@@ -257,13 +257,15 @@ const styles = StyleSheet.create({
     width: 52,
     height: 52,
     borderRadius: 26,
-    backgroundColor: 'rgba(255,255,255,0.08)',
+    backgroundColor: 'rgba(255,255,255,0.86)',
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: 'rgba(15,23,42,0.08)',
   },
   modalBackdrop: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.55)',
+    backgroundColor: 'rgba(15,23,42,0.28)',
     justifyContent: 'flex-end',
   },
   modalSheet: {
@@ -272,6 +274,8 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     gap: 14,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: 'rgba(15,23,42,0.08)',
   },
   modalTitle: {
     color: COLORS.textPrimary,

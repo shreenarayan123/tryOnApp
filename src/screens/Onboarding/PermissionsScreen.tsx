@@ -64,15 +64,15 @@ const PermissionsScreen = ({navigation}: Props) => {
       const result = await permissionsService.request();
       setCameraGranted(result.camera);
       setStorageGranted(result.storage);
-      if (result.camera && result.storage) {
-        storageService.setBoolean('onboarding_complete', true);
+      if (result.camera) {
+        await storageService.setBoolean('onboarding_complete', true);
         setSuccess(true);
         triggerNotification('success');
         setTimeout(() => {
           navigation.getParent()?.navigate('Main' as never);
         }, 700);
       } else {
-        Alert.alert('Permissions needed', 'Camera and storage access are required to continue.');
+        Alert.alert('Permissions needed', 'Camera access is required to continue.');
       }
     } catch {
       Alert.alert('Permission error', 'Please enable the permissions manually in settings.');
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: StyleSheet.hairlineWidth,
-    backgroundColor: 'rgba(255,255,255,0.08)',
+    backgroundColor: 'rgba(15,23,42,0.08)',
   },
 });
 

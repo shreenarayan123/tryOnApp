@@ -1,38 +1,37 @@
-import {MMKV} from 'react-native-mmkv';
-
-export const storage = new MMKV({id: 'trysnap-storage'});
-
-export const mmkvStorageAdapter = {
-  getItem: (key: string) => storage.getString(key) ?? null,
-  setItem: (key: string, value: string) => {
-    storage.set(key, value);
-  },
-  removeItem: (key: string) => {
-    storage.delete(key);
-  },
-};
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const storageService = {
-  getString(key: string) {
-    return storage.getString(key) ?? null;
+  async getString(key: string) {
+    return AsyncStorage.getItem(key);
   },
-  setString(key: string, value: string) {
-    storage.set(key, value);
+  async setString(key: string, value: string) {
+    await AsyncStorage.setItem(key, value);
   },
-  getBoolean(key: string) {
-    return storage.getBoolean(key) ?? null;
+  async getBoolean(key: string) {
+    const value = await AsyncStorage.getItem(key);
+    if (value === null) {
+      return null;
+    }
+
+    return value === 'true';
   },
-  setBoolean(key: string, value: boolean) {
-    storage.set(key, value);
+  async setBoolean(key: string, value: boolean) {
+    await AsyncStorage.setItem(key, String(value));
   },
-  getNumber(key: string) {
-    return storage.getNumber(key) ?? null;
+  async getNumber(key: string) {
+    const value = await AsyncStorage.getItem(key);
+    if (value === null) {
+      return null;
+    }
+
+    const parsed = Number(value);
+    return Number.isNaN(parsed) ? null : parsed;
   },
-  setNumber(key: string, value: number) {
-    storage.set(key, value);
+  async setNumber(key: string, value: number) {
+    await AsyncStorage.setItem(key, String(value));
   },
-  getJSON<T>(key: string, fallback: T): T {
-    const value = storage.getString(key);
+  async getJSON<T>(key: string, fallback: T): Promise<T> {
+    const value = await AsyncStorage.getItem(key);
     if (!value) {
       return fallback;
     }
@@ -43,13 +42,13 @@ export const storageService = {
       return fallback;
     }
   },
-  setJSON(key: string, value: unknown) {
-    storage.set(key, JSON.stringify(value));
+  async setJSON(key: string, value: unknown) {
+    await AsyncStorage.setItem(key, JSON.stringify(value));
   },
-  remove(key: string) {
-    storage.delete(key);
+  async remove(key: string) {
+    await AsyncStorage.removeItem(key);
   },
-  clearAll() {
-    storage.clearAll();
+  async clearAll() {
+    await AsyncStorage.clear();
   },
 };

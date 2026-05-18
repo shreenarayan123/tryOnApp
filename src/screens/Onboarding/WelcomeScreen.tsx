@@ -50,7 +50,17 @@ const WelcomeScreen = ({navigation}: Props) => {
       </View>
 
       <View style={styles.footer}>
-        <Button title="Get Started — It's Free" onPress={() => navigation.navigate('AvatarSetup')} />
+        <Button
+          title="Get Started — It's Free"
+          onPress={() => {
+            console.log('[WelcomeScreen] Get Started pressed');
+            try {
+              navigation.navigate('AvatarSetup');
+            } catch (e) {
+              console.error('[WelcomeScreen] navigation error', e);
+            }
+          }}
+        />
         <Text style={styles.note}>No account needed  •  Works offline  •  Android only</Text>
       </View>
     </View>
@@ -76,7 +86,7 @@ const styles = StyleSheet.create({
     height: 210,
     borderRadius: 105,
     padding: 10,
-    backgroundColor: 'rgba(255,255,255,0.05)',
+    backgroundColor: 'rgba(15,23,42,0.04)',
   },
   illustration: {
     flex: 1,

@@ -16,6 +16,8 @@ const features = [
   'Zero ads — ever',
   'Priority AI processing (2x faster)',
   'Results saved forever',
+  'Download photos to your gallery',
+  'Change Avatar anytime',
   '360° view — coming soon',
   'Early access to new features',
 ];
@@ -122,7 +124,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 4,
     borderWidth: StyleSheet.hairlineWidth,
-    borderColor: 'rgba(255,255,255,0.08)',
+    borderColor: 'rgba(15,23,42,0.08)',
   },
   strikePrice: {
     color: COLORS.textSecondary,
