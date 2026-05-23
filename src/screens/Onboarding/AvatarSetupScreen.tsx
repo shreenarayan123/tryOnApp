@@ -20,6 +20,7 @@ import {useUserStore} from '../../store/useUserStore';
 import {OnboardingStackParamList, RootStackParamList} from '../../types';
 import {permissionsService} from '../../services/permissionsService';
 import {triggerImpact, triggerNotification} from '../../utils/haptics';
+import {validateAvatarPhoto} from '../../services/photoValidationService';
 type Props = NativeStackScreenProps<OnboardingStackParamList, 'AvatarSetup'> & {
   route: any;
 };
@@ -29,6 +30,7 @@ const AvatarSetupScreen = ({navigation, route}: Props) => {
   const setAvatarPhoto = useUserStore(state => state.setAvatarPhoto);
   const [selectedPhoto, setSelectedPhoto] = useState<string | null>(avatarPhotoPath);
   const [saving, setSaving] = useState(false);
+  const [validating, setValidating] = useState(false);
 
   const canContinue = useMemo(() => Boolean(selectedPhoto), [selectedPhoto]);
 
@@ -40,8 +42,27 @@ const AvatarSetupScreen = ({navigation, route}: Props) => {
 
     const uri = response.assets?.[0]?.uri ?? null;
     if (uri) {
-      setSelectedPhoto(uri);
-      triggerImpact('medium');
+      setValidating(true);
+      try {
+        const validation = await validateAvatarPhoto(uri);
+        if (!validation.valid) {
+          const message = [validation.reason, validation.poseWarning ? validation.poseMessage : '']
+            .filter(Boolean)
+            .join('\n\n');
+
+          Alert.alert('Use a clearer photo', message || 'The photo is not suitable for try-ons.', [
+            {text: 'OK'},
+          ]);
+          return;
+        }
+
+        setSelectedPhoto(uri);
+        triggerImpact('medium');
+      } catch (error) {
+        Alert.alert('Unable to validate photo', 'Please try again with a clearer full-body photo.');
+      } finally {
+        setValidating(false);
+      }
     }
   };
 
@@ -111,7 +132,7 @@ const AvatarSetupScreen = ({navigation, route}: Props) => {
       <View style={styles.uploadBox}>
         {selectedPhoto ? (
           <>
-            <FastImage source={{uri: selectedPhoto}} style={styles.previewImage} resizeMode={FastImage.resizeMode.cover} />
+            <FastImage source={{uri: selectedPhoto}} style={styles.previewImage} resizeMode={FastImage.resizeMode.contain} />
             <View style={styles.previewBadge}>
               <MaterialCommunityIcons name="check-circle" size={28} color={COLORS.success} />
             </View>
@@ -134,7 +155,7 @@ const AvatarSetupScreen = ({navigation, route}: Props) => {
         </View>
       </View>
 
-      <Button title="Save & Continue" disabled={!canContinue} loading={saving} onPress={handleSave} />
+      <Button title="Save & Continue" disabled={!canContinue || validating} loading={saving || validating} onPress={handleSave} />
     </ScrollView>
   );
 };
@@ -146,7 +167,7 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 20,
-    paddingBottom: 36,
+    paddingBottom: 16,
     gap: 18,
   },
   header: {
@@ -236,7 +257,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
-    backgroundColor: 'rgba(15,23,42,0.02)',
+    backgroundColor: '#FFFFFF',
   },
   uploadText: {
     color: COLORS.textSecondary,

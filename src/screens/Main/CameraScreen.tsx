@@ -10,6 +10,7 @@ import {
   View,
 } from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {useIsFocused} from '@react-navigation/native';
 import {Camera, useCameraDevice, useCameraPermission} from 'react-native-vision-camera';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {launchImageLibrary} from 'react-native-image-picker';
@@ -33,6 +34,7 @@ const INSTRUCTIONS = [
 const CameraScreen = ({navigation}: Props) => {
   const cameraRef = useRef<any>(null);
   const device = useCameraDevice('back');
+  const isFocused = useIsFocused();
   const {hasPermission, requestPermission} = useCameraPermission();
   const isPro = useUserStore(state => state.isPro);
   const dailyTryOnCount = useUserStore(state => state.dailyTryOnCount);
@@ -106,7 +108,13 @@ const CameraScreen = ({navigation}: Props) => {
   return (
     <View style={styles.container}>
       {device && hasPermission ? (
-        <Camera ref={cameraRef} style={StyleSheet.absoluteFill} device={device} isActive />
+        <Camera
+          ref={cameraRef}
+          style={StyleSheet.absoluteFill}
+          device={device}
+          isActive={isFocused && hasPermission}
+          photo
+        />
       ) : (
         <View style={styles.fallback}>
           <MaterialCommunityIcons name="camera-off" size={44} color={COLORS.textSecondary} />
@@ -211,8 +219,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 18,
     right: 18,
-    bottom: 14,
-    gap: 18,
+    bottom: 8,
+    gap: 14,
   },
   counterCard: {
     backgroundColor: 'rgba(255,255,255,0.86)',

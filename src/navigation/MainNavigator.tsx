@@ -60,8 +60,8 @@ const MainNavigator = () => {
         },
       })}>
       <Tab.Screen name="CameraTab" component={CameraStackNavigator} />
-      <Tab.Screen name="HistoryTab" component={HistoryScreen} />
-      <Tab.Screen name="SettingsTab" component={SettingsScreen} />
+      <Tab.Screen name="HistoryTab" component={HistoryScreen} options={{unmountOnBlur: true}} />
+      <Tab.Screen name="SettingsTab" component={SettingsScreen} options={{unmountOnBlur: true}} />
     </Tab.Navigator>
   );
 };

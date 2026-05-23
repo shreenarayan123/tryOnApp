@@ -54,6 +54,7 @@ const SettingsScreen = ({navigation}: Props) => {
   const clearHistory = useHistoryStore(state => state.clearAll);
   const [privacyOpen, setPrivacyOpen] = useState(false);
   const [howItWorksOpen, setHowItWorksOpen] = useState(false);
+  const [privacyFailed, setPrivacyFailed] = useState(false);
 
   const rootNavigation = navigation.getParent() as any;
 
@@ -83,6 +84,13 @@ const SettingsScreen = ({navigation}: Props) => {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <Text style={styles.title}>Settings</Text>
+      <View style={styles.heroCard}>
+        <MaterialCommunityIcons name="palette-swatch-outline" size={24} color={COLORS.accent} />
+        <View style={{flex: 1}}>
+          <Text style={styles.heroTitle}>TrySnap</Text>
+          <Text style={styles.heroSubtitle}>Light, crisp, and built for shopping-floor try-ons.</Text>
+        </View>
+      </View>
 
       <Card style={styles.section}>
         <Text style={styles.sectionLabel}>Account</Text>
@@ -149,12 +157,25 @@ const SettingsScreen = ({navigation}: Props) => {
             <Text style={styles.modalTitle}>Privacy Policy</Text>
             <View style={{width: 40}} />
           </View>
-          <WebView
-            style={styles.webView}
-            source={{uri: CONFIG.PRIVACY_POLICY_URL}}
-            originWhitelist={['*']}
-            startInLoadingState
-          />
+          {privacyFailed ? (
+            <ScrollView contentContainerStyle={styles.privacyFallback}>
+              <Text style={styles.privacyFallbackTitle}>Privacy Policy</Text>
+              <Text style={styles.privacyFallbackText}>
+                We keep your avatar photo and try-on history on your device. Photos are uploaded only to generate try-on results and are not sold or shared for advertising.
+              </Text>
+              <Text style={styles.privacyFallbackText}>
+                If the website cannot load, please check your connection and try again later.
+              </Text>
+            </ScrollView>
+          ) : (
+            <WebView
+              style={styles.webView}
+              source={{uri: CONFIG.PRIVACY_POLICY_URL}}
+              originWhitelist={['*']}
+              startInLoadingState
+              onError={() => setPrivacyFailed(true)}
+            />
+          )}
         </View>
       </Modal>
 
@@ -185,7 +206,7 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 18,
-    paddingBottom: 32,
+    paddingBottom: 16,
     gap: 14,
   },
   title: {
@@ -194,8 +215,29 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     marginBottom: 2,
   },
+  heroCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    padding: 16,
+    borderRadius: 18,
+    backgroundColor: 'rgba(252,3,111,0.08)',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: 'rgba(252,3,111,0.16)',
+  },
+  heroTitle: {
+    color: COLORS.textPrimary,
+    fontSize: 18,
+    fontWeight: '800',
+  },
+  heroSubtitle: {
+    color: COLORS.textSecondary,
+    marginTop: 2,
+    lineHeight: 18,
+  },
   section: {
     gap: 8,
+    backgroundColor: 'rgba(255,255,255,0.96)',
   },
   sectionLabel: {
     color: COLORS.textSecondary,
@@ -288,6 +330,19 @@ const styles = StyleSheet.create({
   webView: {
     flex: 1,
     backgroundColor: COLORS.background,
+  },
+  privacyFallback: {
+    padding: 20,
+    gap: 12,
+  },
+  privacyFallbackTitle: {
+    color: COLORS.textPrimary,
+    fontSize: 22,
+    fontWeight: '800',
+  },
+  privacyFallbackText: {
+    color: COLORS.textSecondary,
+    lineHeight: 20,
   },
   modalClose: {
     color: COLORS.accent,

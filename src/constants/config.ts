@@ -1,5 +1,6 @@
 export const CONFIG = {
-  API_BASE_URL: 'http://10.206.72.91:4000',
+  // Use localhost during development so `adb reverse` to host works from device.
+  API_BASE_URL: (typeof __DEV__ !== 'undefined' && __DEV__) ? 'http://localhost:4000' : 'http://10.206.72.91:4000',
   FREE_DAILY_LIMIT: 5,
   MAX_IMAGE_SIZE_KB: 500,
   PROCESSING_TIMEOUT_MS: 30000,

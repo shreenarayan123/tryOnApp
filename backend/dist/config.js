@@ -19,7 +19,8 @@ const envSchema = zod_1.z.object({
     GOOGLE_CLOUD_PROJECT_ID: zod_1.z.string().optional(),
     GOOGLE_CLOUD_LOCATION: zod_1.z.string().default('us-central1'),
     GOOGLE_APPLICATION_CREDENTIALS: zod_1.z.string().optional(),
-    VERTEX_IMAGE_MODEL: zod_1.z.string().default('imagegeneration@006'),
+    VERTEX_TEXT_MODEL: zod_1.z.string().default('gemini-2.5-flash'),
+    VERTEX_IMAGE_MODEL: zod_1.z.string().default('imagen-3.0-capability-001'),
 });
 const env = envSchema.parse(process.env);
 exports.config = {
@@ -36,5 +37,6 @@ exports.config = {
     googleCloudProjectId: env.GOOGLE_CLOUD_PROJECT_ID,
     googleCloudLocation: env.GOOGLE_CLOUD_LOCATION,
     googleApplicationCredentials: env.GOOGLE_APPLICATION_CREDENTIALS,
+    vertexTextModel: env.VERTEX_TEXT_MODEL,
     vertexImageModel: env.VERTEX_IMAGE_MODEL,
 };

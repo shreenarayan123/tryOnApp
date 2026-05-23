@@ -37,7 +37,7 @@ const buildImageParts = (value) => {
     return [{ inlineData: { data: base64, mimeType } }];
 };
 const validatePhoto = async (imageBase64) => {
-    const prompt = `Analyze this photo and return JSON only:\n{\n  valid: boolean,\n  reason: string,\n  issues: ['half_body' | 'blurry' | 'bad_lighting' | 'no_person' | 'multiple_persons'],\n  poseWarning: boolean,\n  poseMessage: string\n}\nOnly mark valid true when the image shows one clear full-body person, sharp enough, with usable lighting. If the pose is not straight and facing the camera, set poseWarning true and provide a helpful poseMessage without making the photo invalid.`;
+    const prompt = `Analyze this photo and return JSON only:\n{\n  valid: boolean,\n  reason: string,\n  issues: ['half_body' | 'blurry' | 'bad_lighting' | 'no_person' | 'multiple_persons'],\n  poseWarning: boolean,\n  poseMessage: string\n}\nMark valid false only for hard failures: no person, multiple people, the subject is clearly not visible from head to toe, or the image is so blurry/dark that the body and clothing cannot be recognized. Do not reject photos for a slight angle, minor crop at the frame edges, background clutter, or normal indoor lighting. If the person is visible from head to toe but the pose is not straight or not facing the camera, keep valid true, set poseWarning true, and provide a helpful poseMessage.`;
     if (useOpenAI && openai) {
         // Upload image to Cloudinary temporarily so we can send a URL to OpenAI
         const { buffer } = (0, image_1.readBase64Image)(imageBase64);

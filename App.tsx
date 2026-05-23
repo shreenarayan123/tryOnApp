@@ -13,7 +13,7 @@ const AppShell = () => {
         flex: 1,
         backgroundColor: COLORS.background,
       }}
-      edges={['top', 'bottom']}>
+      edges={['top']}>
       <View style={{flex: 1, backgroundColor: COLORS.background}}>
         <StatusBar barStyle="dark-content" backgroundColor={COLORS.background} />
         <RootNavigator />
@@ -30,7 +30,7 @@ const App = () => {
 
   return (
     <GestureHandlerRootView style={{flex: 1}}>
-      <SafeAreaProvider>
+      <SafeAreaProvider style={{flex: 1, paddingBottom:30}}>
         <AppShell />
       </SafeAreaProvider>
     </GestureHandlerRootView>

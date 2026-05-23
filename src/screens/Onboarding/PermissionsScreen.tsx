@@ -120,6 +120,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.background,
     padding: 24,
+    paddingBottom: 16,
     justifyContent: 'center',
     gap: 22,
   },

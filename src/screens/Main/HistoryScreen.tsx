@@ -2,6 +2,7 @@ import React, {useEffect, useMemo, useState} from 'react';
 import {
   Alert,
   FlatList,
+  Modal,
   Pressable,
   StyleSheet,
   Text,
@@ -17,6 +18,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import Button from '../../components/common/Button';
+import ZoomableImageView from '../../components/common/ZoomableImageView';
 import ResultCard from '../../components/result/ResultCard';
 import {COLORS} from '../../constants/colors';
 import {useHistoryStore} from '../../store/useHistoryStore';
@@ -67,6 +69,7 @@ const HistoryScreen = ({navigation}: Props) => {
   const removeResult = useHistoryStore(state => state.removeResult);
   const clearAll = useHistoryStore(state => state.clearAll);
   const [loading, setLoading] = useState(true);
+  const [selectedResult, setSelectedResult] = useState<TryOnResult | null>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 650);
@@ -133,11 +136,34 @@ const HistoryScreen = ({navigation}: Props) => {
             <ResultCard
               imageUri={item.resultImagePath}
               timestampLabel={formatTimestamp(item.timestamp)}
+              onPress={() => setSelectedResult(item)}
               onLongPress={() => deleteItem(item)}
             />
           )}
         />
       )}
+
+      <Modal visible={Boolean(selectedResult)} animationType="slide" onRequestClose={() => setSelectedResult(null)}>
+        <View style={styles.viewerContainer}>
+          <View style={styles.viewerHeader}>
+            <Pressable onPress={() => setSelectedResult(null)} hitSlop={12}>
+              <MaterialCommunityIcons name="close" size={26} color={COLORS.textPrimary} />
+            </Pressable>
+            <Text style={styles.viewerTitle}>Full View</Text>
+            <View style={{width: 26}} />
+          </View>
+
+          {selectedResult ? (
+            <View style={styles.viewerImageWrap}>
+              <Text style={styles.viewerTimestamp}>{formatTimestamp(selectedResult.timestamp)}</Text>
+              <ZoomableImageView
+                imageUri={selectedResult.resultImagePath}
+                containerStyle={styles.viewerImage}
+              />
+            </View>
+          ) : null}
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -207,6 +233,38 @@ const styles = StyleSheet.create({
     marginTop: 10,
     width: '70%',
     borderRadius: 999,
+    backgroundColor: COLORS.surfaceLight,
+  },
+  viewerContainer: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+    padding: 18,
+  },
+  viewerHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+  },
+  viewerTitle: {
+    color: COLORS.textPrimary,
+    fontSize: 20,
+    fontWeight: '800',
+  },
+  viewerImageWrap: {
+    gap: 10,
+    flex: 1,
+  },
+  viewerTimestamp: {
+    color: COLORS.textSecondary,
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  viewerImage: {
+    width: '100%',
+    flex: 1,
+    minHeight: 420,
+    borderRadius: 18,
     backgroundColor: COLORS.surfaceLight,
   },
 });

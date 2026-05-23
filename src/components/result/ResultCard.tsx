@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {Pressable, StyleSheet, Text} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {COLORS} from '../../constants/colors';
 

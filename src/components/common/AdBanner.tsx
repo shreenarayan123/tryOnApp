@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {BannerAd, BannerAdSize, TestIds} from 'react-native-google-mobile-ads';
 import {CONFIG} from '../../constants/config';
@@ -8,20 +8,6 @@ interface AdBannerProps {
 }
 
 const AdBanner = ({visible = true}: AdBannerProps) => {
-  const [refreshKey, setRefreshKey] = useState(0);
-
-  useEffect(() => {
-    if (!visible) {
-      return;
-    }
-
-    const timer = setInterval(() => {
-      setRefreshKey(value => value + 1);
-    }, 30000);
-
-    return () => clearInterval(timer);
-  }, [visible]);
-
   if (!visible) {
     return null;
   }
@@ -29,7 +15,6 @@ const AdBanner = ({visible = true}: AdBannerProps) => {
   return (
     <View style={styles.container}>
       <BannerAd
-        key={refreshKey}
         unitId={CONFIG.ADMOB_IDS.BANNER || TestIds.BANNER}
         size={BannerAdSize.BANNER}
       />

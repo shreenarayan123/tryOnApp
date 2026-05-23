@@ -23,6 +23,7 @@ import Animated, {
 import Button from '../../components/common/Button';
 import ShareButton from '../../components/result/ShareButton';
 import AdBanner from '../../components/common/AdBanner';
+import ZoomableImageView from '../../components/common/ZoomableImageView';
 import {COLORS} from '../../constants/colors';
 import {useUserStore} from '../../store/useUserStore';
 import {CameraStackParamList} from '../../types';
@@ -110,7 +111,7 @@ const ResultScreen = ({navigation, route}: Props) => {
 
       <Animated.View style={[styles.previewWrap, animatedStyle]} entering={FadeInUp.duration(400)}>
         <View style={styles.phoneFrame}>
-          <FastImage source={{uri: resultImagePath}} style={styles.previewImage} resizeMode={FastImage.resizeMode.cover} />
+          <ZoomableImageView imageUri={resultImagePath} containerStyle={styles.previewImage} />
         </View>
       </Animated.View>
 

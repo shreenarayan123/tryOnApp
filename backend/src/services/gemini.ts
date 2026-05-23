@@ -36,7 +36,7 @@ const buildImageParts = (value: string) => {
 };
 
 export const validatePhoto = async (imageBase64: string): Promise<PhotoValidationResult> => {
-  const prompt = `Analyze this photo and return JSON only:\n{\n  valid: boolean,\n  reason: string,\n  issues: ['half_body' | 'blurry' | 'bad_lighting' | 'no_person' | 'multiple_persons'],\n  poseWarning: boolean,\n  poseMessage: string\n}\nOnly mark valid true when the image shows one clear full-body person, sharp enough, with usable lighting. If the pose is not straight and facing the camera, set poseWarning true and provide a helpful poseMessage without making the photo invalid.`;
+  const prompt = `Analyze this photo and return JSON only:\n{\n  valid: boolean,\n  reason: string,\n  issues: ['half_body' | 'blurry' | 'bad_lighting' | 'no_person' | 'multiple_persons'],\n  poseWarning: boolean,\n  poseMessage: string\n}\nMark valid false only for hard failures: no person, multiple people, the subject is clearly not visible from head to toe, or the image is so blurry/dark that the body and clothing cannot be recognized. Do not reject photos for a slight angle, minor crop at the frame edges, background clutter, or normal indoor lighting. If the person is visible from head to toe but the pose is not straight or not facing the camera, keep valid true, set poseWarning true, and provide a helpful poseMessage.`;
 
   if (useOpenAI && openai) {
     // Upload image to Cloudinary temporarily so we can send a URL to OpenAI
@@ -45,8 +45,8 @@ export const validatePhoto = async (imageBase64: string): Promise<PhotoValidatio
     const uploaded = await uploadBufferToCloudinary(buffer, 'temp/validation', publicId);
     const imageUrl = uploaded.secure_url;
 
-    const system = `You are an assistant that returns JSON only matching the schema exactly.`;
-    const user = `Analyze this photo at the URL: ${imageUrl} and return JSON only matching the shape: { valid: boolean, reason: string, issues: ['half_body'|'blurry'|'bad_lighting'|'no_person'|'multiple_persons'], poseWarning: boolean, poseMessage: string }. Only set valid true when the image shows one clear full-body person, sharp and with usable lighting.`;
+    const system = `You are an assistant that returns JSON only matching the schema exactly. Be conservative only about hard failures, and prefer valid=true when the photo is usable for avatar setup. If valid is false, the reason must be a specific, photo-grounded explanation of what is wrong with the current image, not a generic rejection.`;
+    const user = `Analyze this photo at the URL: ${imageUrl} and return JSON only matching the shape: { valid: boolean, reason: string, issues: ['half_body'|'blurry'|'bad_lighting'|'no_person'|'multiple_persons'], poseWarning: boolean, poseMessage: string }. Mark valid false only for hard failures: no person, multiple people, the subject is clearly not visible from head to toe, or the image is so blurry/dark that the body and clothing cannot be recognized. Do not reject photos for a slight angle, minor crop at the frame edges, background clutter, or normal indoor lighting. If the person is visible from head to toe but the pose is not straight or not facing the camera, keep valid true, set poseWarning true, and provide a helpful poseMessage. If invalid, reason must say exactly what is wrong in this photo in one sentence, for example: the person is cropped at the knees, the image is too dark to see the body clearly, or another person is visible in the frame.`;
 
     const res = await openai.chat.completions.create({
       model: 'gpt-4o-mini',
